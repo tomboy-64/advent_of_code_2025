@@ -2,6 +2,8 @@
 
 import copy
 
+candidates = set()
+
 with open("input_day6.txt", "r", encoding="utf-8") as file:
   maze = []
   guard = (-1,-1)
@@ -20,6 +22,11 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
   
   while True:
     maze[guard[0]][guard[1]] = 'X'
+    candidates.add([guard[0],guard[1]])
+    candidates.add([guard[0]+1,guard[1]])
+    candidates.add([guard[0]-1,guard[1]])
+    candidates.add([guard[0],guard[1]+1])
+    candidates.add([guard[0],guard[1]-1])
     if g_dir == '^':
       # still in area
       if guard[0] > 0:
