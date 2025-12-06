@@ -82,7 +82,7 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
 
 
 def walk(maze, guard):
-  turns = set()
+  turns = []
   g_dir = '^'
 
   while True:
@@ -94,7 +94,7 @@ def walk(maze, guard):
         if maze[guard[0]-1][guard[1]] == '#':
           if (guard,'>') in turns:
             return True
-          turns.add((deepcopy(guard), '>'))
+          turns.append((deepcopy(guard), '>'))
           g_dir = '>'
         else: # or go ahead
           guard[0] = guard[0] - 1
@@ -109,7 +109,7 @@ def walk(maze, guard):
         if maze[guard[0]][guard[1]+1] == '#':
           if (guard,'v') in turns:
             return True
-          turns.add((deepcopy(guard), 'v'))
+          turns.append((deepcopy(guard), 'v'))
           g_dir = 'v'
         else: # go ahead
           guard[1] = guard[1] + 1
@@ -124,7 +124,7 @@ def walk(maze, guard):
         if maze[guard[0]+1][guard[1]] == '#':
           if (guard,'<') in turns:
             return True
-          turns.add((deepcopy(guard), '<'))          
+          turns.append((deepcopy(guard), '<'))          
           g_dir = '<'
         else: # go ahead
           guard[0] = guard[0] + 1
@@ -139,7 +139,7 @@ def walk(maze, guard):
         if maze[guard[0]][guard[1]-1] == '#':
           if (guard,'^') in turns:
             return True
-          turns.add((deepcopy(guard), '^'))
+          turns.append((deepcopy(guard), '^'))
           g_dir = '^'
         else: # go ahead
           guard[1] = guard[1] - 1
@@ -166,6 +166,7 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
       print(f'guard: {guard}')
 
   loops = 0
+  #print(maze)
   while True:
     try:
       x = candidates.pop()
@@ -173,9 +174,9 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
       m2[x[0]][x[1]] = '#'
       if walk(m2, deepcopy(guard)):
         loops = loops + 1
-        print(loops, f'found for {x} - {len(candidates)} left')
-      else:
-        print(f'no loop found for {x}')
+        #print(loops, f'found for {x} - {len(candidates)} left')
+      #else:
+      #  print(f'no loop found for {x}')
     except:
       break
   print(loops)
