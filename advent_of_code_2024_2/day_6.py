@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import copy
+from copy import copy, deepcopy
 
 candidates = set()
 
@@ -22,11 +22,7 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
   
   while True:
     maze[guard[0]][guard[1]] = 'X'
-    candidates.add([guard[0],guard[1]])
-    candidates.add([guard[0]+1,guard[1]])
-    candidates.add([guard[0]-1,guard[1]])
-    candidates.add([guard[0],guard[1]+1])
-    candidates.add([guard[0],guard[1]-1])
+    candidates.add((guard[0],guard[1]))
     if g_dir == '^':
       # still in area
       if guard[0] > 0:
@@ -86,7 +82,7 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
 
 
 def walk(maze, guard):
-  turns = []
+  turns = set()
   g_dir = '^'
 
   while True:
@@ -98,7 +94,7 @@ def walk(maze, guard):
         if maze[guard[0]-1][guard[1]] == '#':
           if (guard,'>') in turns:
             return True
-          turns.append((deepcopy(guard), '>'))
+          turns.add((deepcopy(guard), '>'))
           g_dir = '>'
         else: # or go ahead
           guard[0] = guard[0] - 1
@@ -113,7 +109,7 @@ def walk(maze, guard):
         if maze[guard[0]][guard[1]+1] == '#':
           if (guard,'v') in turns:
             return True
-          turns.append((deepcopy(guard), 'v'))
+          turns.add((deepcopy(guard), 'v'))
           g_dir = 'v'
         else: # go ahead
           guard[1] = guard[1] + 1
@@ -128,7 +124,7 @@ def walk(maze, guard):
         if maze[guard[0]+1][guard[1]] == '#':
           if (guard,'<') in turns:
             return True
-          turns.append((deepcopy(guard), '<'))          
+          turns.add((deepcopy(guard), '<'))          
           g_dir = '<'
         else: # go ahead
           guard[0] = guard[0] + 1
@@ -143,7 +139,7 @@ def walk(maze, guard):
         if maze[guard[0]][guard[1]-1] == '#':
           if (guard,'^') in turns:
             return True
-          turns.append((deepcopy(guard), '^'))
+          turns.add((deepcopy(guard), '^'))
           g_dir = '^'
         else: # go ahead
           guard[1] = guard[1] - 1
@@ -153,7 +149,7 @@ def walk(maze, guard):
         raise Exception("Can't happen. Handled already. (4)")
     else:
       break
-
+  
   return False
 
 with open("input_day6.txt", "r", encoding="utf-8") as file:
@@ -170,7 +166,6 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
       print(f'guard: {guard}')
 
   loops = 0
-  #print(maze)
   while True:
     try:
       x = candidates.pop()
@@ -178,9 +173,7 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
       m2[x[0]][x[1]] = '#'
       if walk(m2, deepcopy(guard)):
         loops = loops + 1
-        #print(loops, f'found for {x} - {len(candidates)} left')
-      #else:
-      #  print(f'no loop found for {x}')
+        print(loops, f'- {len(candidates)} left')
     except:
       break
   print(loops)
