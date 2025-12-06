@@ -149,7 +149,7 @@ def walk(maze, guard):
         raise Exception("Can't happen. Handled already. (4)")
     else:
       break
-  
+
   return False
 
 with open("input_day6.txt", "r", encoding="utf-8") as file:
@@ -173,7 +173,9 @@ with open("input_day6.txt", "r", encoding="utf-8") as file:
       m2[x[0]][x[1]] = '#'
       if walk(m2, deepcopy(guard)):
         loops = loops + 1
-        print(loops, f'- {len(candidates)} left')
+        print(loops, f'found for {x} - {len(candidates)} left')
+      else:
+        print(f'no loop found for {x}')
     except:
       break
   print(loops)
